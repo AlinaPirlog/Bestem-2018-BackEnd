@@ -20,7 +20,7 @@ public class ItineraryItem {
     @Column(name = "end_date")
     private Date endDate;
     @Column(name = "description")
-    private Date description;
+    private String description;
     @ManyToOne
     @JoinColumn(name = "itinerary_id", nullable = false)
     private Itinerary itinerary;
@@ -40,7 +40,7 @@ public class ItineraryItem {
     private List<User> participants;
 
     public ItineraryItem(String itineraryItemName, Date startDate,
-                         Date endDate, Date description,
+                         Date endDate, String description,
                          Itinerary itinerary, User organiser,
                          List<User> participants) {
         this.itineraryItemName = itineraryItemName;
@@ -84,11 +84,11 @@ public class ItineraryItem {
         this.endDate = endDate;
     }
 
-    public Date getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Date description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

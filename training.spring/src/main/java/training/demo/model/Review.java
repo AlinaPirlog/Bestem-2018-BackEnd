@@ -13,7 +13,7 @@ public class Review {
     @Column(name = "review_id")
     private int reviewId;
     @Column(name = "rating")
-    private int rating;
+    private Integer rating;
     @Column(name = "description")
     private String description;
     @ManyToOne
@@ -53,11 +53,11 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 

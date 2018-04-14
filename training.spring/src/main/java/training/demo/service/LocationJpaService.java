@@ -26,6 +26,13 @@ public class LocationJpaService{
         return false;
     }
 
+    public boolean updateLocation(Location location) {
+        if(locationRepository.save(location) != null){
+            return true;
+        }
+        return false;
+    }
+
     public void deleteLocationByLocationId(int id) {
         locationRepository.deleteLocationByLocationId(id);
     }

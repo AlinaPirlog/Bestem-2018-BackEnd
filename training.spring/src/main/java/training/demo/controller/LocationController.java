@@ -34,7 +34,6 @@ public class LocationController {
         return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
     }
 
-
     @RequestMapping(
             value = "/create",
             method = RequestMethod.POST)
@@ -46,23 +45,34 @@ public class LocationController {
     }
 
     @RequestMapping(
-            value = "/update",
-            method = RequestMethod.POST)
-    public ResponseEntity<Location> updateEvent(@RequestBody Location location){
-        Location searchedlocation = locationJpaService.findLocationById(location.getLocationId());
-        if(searchedlocation == null){
+            value = "/update/{id}",
+            method = RequestMethod.PUT)
+    public ResponseEntity<Location> updateLocation(@PathVariable("id") int idLocation,
+                                                   @RequestBody Location location){
+        Location currentLocation = locationJpaService.findLocationById(idLocation);
+        if(location == null){
             return new ResponseEntity<Location>(HttpStatus.NOT_FOUND);
         }
-        else{
-            return new ResponseEntity<Location>(searchedlocation, HttpStatus.OK);
+
+        currentLocation.setLocationName(location.getLocationName());
+        currentLocation.setLongitude(location.getLongitude());
+        currentLocation.setLongitude(location.getLongitude());
+        currentLocation.setDescription(location.getDescription());
+        currentLocation.setCity(location.getCity());
+        currentLocation.setCountry(location.getCountry());
+
+        if(locationJpaService.updateLocation(currentLocation)){
+            return new ResponseEntity<Location>(location, HttpStatus.OK);
         }
+        return new ResponseEntity<Location>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(
-            value = "/delete/",
-            method = RequestMethod.POST)
-    public ResponseEntity<Location> createPin(@RequestBody Location location){
-        locationJpaService.deleteLocationByLocationId(location.getLocationId());
+            value = "/delete/{id}",
+            method = RequestMethod.DELETE)
+    public ResponseEntity<Location> deleteLocation(@PathVariable("id") int locationId){
+
+        locationJpaService.deleteLocationByLocationId(locationId);
         return new ResponseEntity<Location>(HttpStatus.OK);
     }
 }

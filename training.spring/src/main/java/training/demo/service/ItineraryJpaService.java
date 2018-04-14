@@ -28,7 +28,7 @@ public class ItineraryJpaService{
         itineraryRepository.deleteItineraryByItineraryId(id);
     }
 
-    public Itinerary findItineraryById(int id) {
+    public Itinerary findItineraryByItineraryId(int id) {
         return itineraryRepository.findByItineraryId(id);
     }
 

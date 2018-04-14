@@ -9,7 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import training.demo.model.Itinerary;
+import training.demo.model.User;
+import training.demo.security.JwtTokenUtil;
 import training.demo.service.ItineraryJpaService;
+import training.demo.service.UserJpaService;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/api/itinerary",
@@ -21,6 +26,10 @@ public class ItineraryController {
 
     @Autowired
     ItineraryJpaService itineraryService;
+    @Autowired
+    UserJpaService userService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(
             value = "/get",
@@ -38,9 +47,15 @@ public class ItineraryController {
     @RequestMapping(
             value = "/create",
             method = RequestMethod.POST)
-    public ResponseEntity<Itinerary> createEvent(@RequestBody Itinerary itinerary){
+    public ResponseEntity<Itinerary> createItinerary(@RequestBody Itinerary itinerary,
+                                                     HttpServletRequest request){
+        String token = request.getHeader(tokenHeader).substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        User user = userService.loadUserByUsername(username);
+        itinerary.setUser(user);
+
         if(itineraryService.addItinerary(itinerary)){
-            return new ResponseEntity<Itinerary>(itinerary, HttpStatus.OK);
+            return new ResponseEntity<Itinerary>(HttpStatus.OK);
         }
         return new ResponseEntity<Itinerary>(HttpStatus.BAD_REQUEST);
     }
@@ -48,21 +63,35 @@ public class ItineraryController {
     @RequestMapping(
             value = "/update/{id}",
             method = RequestMethod.PUT)
-    public ResponseEntity<Itinerary> updateEvent(@PathVariable("id") int idEvent){
-        Itinerary event = itineraryService.findItineraryById(idEvent);
-        if(event == null){
+    public ResponseEntity<Itinerary> updateItinerary(@PathVariable("id") int idItinerary,
+                                                     @RequestBody Itinerary itinerary,
+                                                     HttpServletRequest request){
+        Itinerary currentItinerary = itineraryService.
+                findItineraryByItineraryId(idItinerary);
+
+        if(currentItinerary == null){
             return new ResponseEntity<Itinerary>(HttpStatus.NOT_FOUND);
         }
-        else{
-            return new ResponseEntity<Itinerary>(event,HttpStatus.OK);
+        String token = request.getHeader(tokenHeader).substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        User user = userService.loadUserByUsername(username);
+        currentItinerary.setUser(user);
+        currentItinerary.setItineraryName(itinerary.getItineraryName());
+        currentItinerary.setRating(itinerary.getRating());
+        currentItinerary.setReviews(itinerary.getReviews());
+        currentItinerary.setItineraryItems(itinerary.getItineraryItems());
+
+        if(itineraryService.addItinerary(currentItinerary)){
+            return new ResponseEntity<Itinerary>(itinerary, HttpStatus.OK);
         }
+        return new ResponseEntity<Itinerary>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(
             value = "/delete/{id}",
             method = RequestMethod.DELETE)
-    public ResponseEntity<Itinerary> createPin(@PathVariable("id") int idEvent){
-        itineraryService.deleteItineraryByItineraryId(idEvent);
+    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable("id") int idItinerary){
+        itineraryService.deleteItineraryByItineraryId(idItinerary);
         return new ResponseEntity<Itinerary>(HttpStatus.OK);
     }
 }

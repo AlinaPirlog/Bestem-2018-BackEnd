@@ -1,10 +1,16 @@
 package training.demo.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "itinerary")
-public class Itinerary {
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class, property="@itineraryId")
+public class Itinerary implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -17,7 +23,7 @@ public class Itinerary {
     @Column(name = "rating")
     private int rating;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
 
