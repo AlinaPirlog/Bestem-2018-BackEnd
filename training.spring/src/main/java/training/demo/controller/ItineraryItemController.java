@@ -42,6 +42,10 @@ public class ItineraryItemController {
         Itinerary itinerary = itineraryService.findItineraryByItineraryId(idItinerary);
 
         List<ItineraryItem> itineraryItems = itineraryItemService.findItinerariesByItinerary(itinerary);
+        for (ItineraryItem item: itineraryItems) {
+            item.setItinerary(null);
+            item.setOrganiser(null);
+        }
         if(itineraryItems.isEmpty()){
             return new ResponseEntity<List<ItineraryItem>>(itineraryItems, HttpStatus.NOT_FOUND);
         }
