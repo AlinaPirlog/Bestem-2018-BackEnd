@@ -8,9 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import training.demo.controller.util.ItineraryControllerUtil;
 import training.demo.model.Itinerary;
+import training.demo.model.ItineraryItem;
 import training.demo.model.User;
 import training.demo.security.JwtTokenUtil;
+import training.demo.service.ItineraryItemJpaService;
 import training.demo.service.ItineraryJpaService;
 import training.demo.service.UserJpaService;
 
@@ -29,13 +32,24 @@ public class ItineraryController {
     @Autowired
     UserJpaService userService;
     @Autowired
+    ItineraryItemJpaService itineraryItemService;
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping(
             value = "/get",
             method = RequestMethod.GET)
-    public ResponseEntity<List<Itinerary>> getAll(){
-        List<Itinerary> itineraries = itineraryService.findAllItineraries();
+    public ResponseEntity<List<Itinerary>> getAll(HttpServletRequest request){
+        String token = request.getHeader(tokenHeader).substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        User user = userService.loadUserByUsername(username);
+
+        List<Itinerary> itineraries = itineraryService.findItineraryByUser(user);
+        for (Itinerary itinerary:
+             itineraries) {
+            itinerary.setUser(null);
+            itinerary.setItineraryItems(null);
+        }
         if(itineraries.isEmpty()){
             return new ResponseEntity<List<Itinerary>>(HttpStatus.NOT_FOUND);
         }
@@ -54,8 +68,13 @@ public class ItineraryController {
         User user = userService.loadUserByUsername(username);
         itinerary.setUser(user);
 
+        List<ItineraryItem> itineraryItemList = itinerary.getItineraryItems();
+
         if(itineraryService.addItinerary(itinerary)){
-            return new ResponseEntity<Itinerary>(HttpStatus.OK);
+            ItineraryControllerUtil itineraryControllerUtil = new ItineraryControllerUtil();
+            itineraryControllerUtil.saveItineraryItems(user, itineraryItemService, itinerary, itineraryItemList);
+            itinerary.setUser(null);
+            return new ResponseEntity<Itinerary>(itinerary, HttpStatus.OK);
         }
         return new ResponseEntity<Itinerary>(HttpStatus.BAD_REQUEST);
     }

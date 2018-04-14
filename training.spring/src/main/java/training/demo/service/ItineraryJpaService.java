@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import training.demo.model.Itinerary;
+import training.demo.model.User;
 import training.demo.repository.ItineraryRepository;
 
 @Service
@@ -30,6 +31,10 @@ public class ItineraryJpaService{
 
     public Itinerary findItineraryByItineraryId(int id) {
         return itineraryRepository.findByItineraryId(id);
+    }
+
+    public List<Itinerary> findItineraryByUser(User user) {
+        return itineraryRepository.findByUser(user);
     }
 
     public List<Itinerary> findAllItineraries(){
