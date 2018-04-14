@@ -16,8 +16,16 @@ public class Itinerary {
     private String itineraryName;
     @Column(name = "rating")
     private int rating;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
+
     @OneToMany(mappedBy = "itinerary")
-    private List<User> users;
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "itinerary")
+    private List<ItineraryItem> itineraryItems;
 
     public int getItineraryID() {
         return itineraryID;
@@ -43,11 +51,11 @@ public class Itinerary {
         this.rating = rating;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

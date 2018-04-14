@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -20,7 +21,7 @@ public class User implements Serializable, UserDetails{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int userId;
 	
@@ -36,9 +37,17 @@ public class User implements Serializable, UserDetails{
 	@Column(name = "role")
 	private String role;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="itinerary_id")
-	private Itinerary itinerary;
+    @OneToMany(mappedBy = "user")
+    private List<Itinerary> itineraries;
+
+    @OneToMany(mappedBy = "organiser")
+    private List<ItineraryItem> itineraryItems;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Review> reviews;
+
+    @ManyToMany(mappedBy = "participants")
+    private List<ItineraryItem> itineraryItemsToParticipate;
 
 	@JsonIgnore
 	public int getUserId() {
@@ -84,12 +93,40 @@ public class User implements Serializable, UserDetails{
 		this.role = role;
 	}
 
-    public Itinerary getItinerary() {
-        return itinerary;
+    public List<Itinerary> getItineraries() {
+        return itineraries;
     }
 
-    public void setItinerary(Itinerary itinerary) {
-        this.itinerary = itinerary;
+    public void setItineraries(List<Itinerary> itineraries) {
+        this.itineraries = itineraries;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public List<ItineraryItem> getItineraryItems() {
+        return itineraryItems;
+    }
+
+    public void setItineraryItems(List<ItineraryItem> itineraryItems) {
+        this.itineraryItems = itineraryItems;
+    }
+
+    public List<ItineraryItem> getItineraryItemsToParticipate() {
+        return itineraryItemsToParticipate;
+    }
+
+    public void setItineraryItemsToParticipate(List<ItineraryItem> itineraryItemsToParticipate) {
+        this.itineraryItemsToParticipate = itineraryItemsToParticipate;
     }
 
     @Override

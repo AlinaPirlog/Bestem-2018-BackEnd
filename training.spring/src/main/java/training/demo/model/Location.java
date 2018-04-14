@@ -8,7 +8,7 @@ public class Location {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "location_id")
     private int locationId;
 
@@ -80,4 +80,6 @@ public class Location {
     public void setCountry(String country) {
         this.country = country;
     }
+
+
 }
