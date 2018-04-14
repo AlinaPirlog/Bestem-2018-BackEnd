@@ -26,6 +26,17 @@ public class Review {
             inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
     private List<User> users;
 
+    public Review() {
+        super();
+    }
+
+    public Review(int rating, String description, Itinerary itinerary, List<User> users) {
+        this.rating = rating;
+        this.description = description;
+        this.itinerary = itinerary;
+        this.users = users;
+    }
+
     public List<User> getUsers() {
         return users;
     }

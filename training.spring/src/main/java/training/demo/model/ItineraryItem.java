@@ -28,12 +28,29 @@ public class ItineraryItem {
     @JoinColumn(name = "user_id", nullable = false)
     private User organiser;
 
+    public ItineraryItem() {
+        super();
+    }
+
     @ManyToMany
     @JoinTable(
             name="itinerary_user",
             joinColumns=@JoinColumn(name="itinerary_item_id", referencedColumnName="itinerary_item_id"),
             inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
     private List<User> participants;
+
+    public ItineraryItem(String itineraryItemName, Date startDate,
+                         Date endDate, Date description,
+                         Itinerary itinerary, User organiser,
+                         List<User> participants) {
+        this.itineraryItemName = itineraryItemName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.itinerary = itinerary;
+        this.organiser = organiser;
+        this.participants = participants;
+    }
 
     public int getItineraryItemId() {
         return itineraryItemId;

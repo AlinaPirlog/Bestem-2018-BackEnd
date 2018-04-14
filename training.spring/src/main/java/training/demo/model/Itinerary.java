@@ -27,6 +27,18 @@ public class Itinerary {
     @OneToMany(mappedBy = "itinerary")
     private List<ItineraryItem> itineraryItems;
 
+    public Itinerary() {
+        super();
+    }
+
+    public Itinerary(String itineraryName, int rating, User user, List<Review> reviews, List<ItineraryItem> itineraryItems) {
+        this.itineraryName = itineraryName;
+        this.rating = rating;
+        this.user = user;
+        this.reviews = reviews;
+        this.itineraryItems = itineraryItems;
+    }
+
     public int getItineraryId() {
         return itineraryId;
     }

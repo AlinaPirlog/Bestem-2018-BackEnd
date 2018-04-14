@@ -8,8 +8,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +20,14 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import training.demo.model.Location;
 import training.demo.model.User;
 import training.demo.security.JwtTokenUtil;
 import training.demo.service.UserJpaService;
  
 @RestController
+@RequestMapping(value = "/api/user",
+		produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 	
@@ -33,7 +39,7 @@ public class UserController {
 	@Autowired
 	UserJpaService userService;
 	
-	@RequestMapping(value = "user", method = RequestMethod.GET)
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
     public User getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader).substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(token);
@@ -56,17 +62,17 @@ public class UserController {
         return ResponseEntity.ok("Greetings from admin protected method!");
     }
 
-	@RequestMapping(value = "/add_user")
-	@ResponseBody
-	public String addUser() {
-		User user = new User();
-		user.setUsername("firstTest");
-		user.setPassword("lastTest");
-		
-		userService.addUser(user);
-		
-		return "User added.";
-		
+	@RequestMapping(
+			value = "/register",
+			method = RequestMethod.POST)
+	public ResponseEntity<User> registerUser(@RequestBody User user) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		user.setPassword(encoder.encode(user.getPassword()));
+		user.setRole("ROLE_USER");
+		if(userService.addUser(user)){
+			return new ResponseEntity<User>(HttpStatus.OK);
+		}
+		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "find_all_users")

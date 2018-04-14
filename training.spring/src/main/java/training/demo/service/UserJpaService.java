@@ -20,8 +20,11 @@ public class UserJpaService implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void addUser(User user) {
-		userRepository.save(user);
+	public boolean addUser(User user) {
+		if(userRepository.save(user) != null){
+			return true;
+		}
+		return false;
 	}
 	
 	public void deleteUserById(int id) {

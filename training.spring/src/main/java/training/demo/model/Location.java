@@ -25,6 +25,19 @@ public class Location {
     @Column(name = "country")
     private String country;
 
+    public Location() {
+        super();
+    }
+
+    public Location(String locationName, String longitude, String latitude, String description, String city, String country) {
+        this.locationName = locationName;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.description = description;
+        this.city = city;
+        this.country = country;
+    }
+
     public int getLocationId() {
         return locationId;
     }

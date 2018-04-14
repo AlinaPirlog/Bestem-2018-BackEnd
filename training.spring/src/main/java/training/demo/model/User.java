@@ -23,6 +23,7 @@ public class User implements Serializable, UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
 	@Column(name = "id")
 	private int userId;
 	
@@ -56,7 +57,27 @@ public class User implements Serializable, UserDetails{
     @ManyToMany(mappedBy = "participants")
     private List<ItineraryItem> itineraryItemsToParticipate;
 
-	@JsonIgnore
+    public User() {
+        super();
+    }
+
+    public User(String username, String password,
+                String email, String role,
+                String phoneNumber, String companyName,
+                List<Itinerary> itineraries, List<ItineraryItem> itineraryItems,
+                List<Review> reviews, List<ItineraryItem> itineraryItemsToParticipate) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.companyName = companyName;
+        this.itineraries = itineraries;
+        this.itineraryItems = itineraryItems;
+        this.reviews = reviews;
+        this.itineraryItemsToParticipate = itineraryItemsToParticipate;
+    }
+
 	public int getUserId() {
 		return userId;
 	}
@@ -73,8 +94,7 @@ public class User implements Serializable, UserDetails{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	@JsonIgnore
+
     @Override
 	public String getPassword() {
 		return password;
