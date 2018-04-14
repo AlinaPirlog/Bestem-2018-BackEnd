@@ -36,7 +36,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
-    	System.out.println("User "+authenticationRequest.getUsername() +" is trying to authenticate with password: "+authenticationRequest.getPassword());
+    	System.out.println("User "+ authenticationRequest.getUsername() +" is trying to authenticate with password: "+authenticationRequest.getPassword());
         
     	// Perform the security
         final Authentication authentication = authenticationManager.authenticate(
@@ -45,6 +45,7 @@ public class AuthenticationController {
                         authenticationRequest.getPassword()
                 )
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Reload password post-security so we can generate token
