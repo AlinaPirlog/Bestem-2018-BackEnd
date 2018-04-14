@@ -22,7 +22,9 @@ public class ItineraryControllerUtil {
             item.setOrganiser(organiser);
             item.setItinerary(itinerary);
             service.addItineraryItem(item);
-            
+        }
+        for (ItineraryItem item: itineraryItemList) {
+            item.setOrganiser(null);
         }
 
         itinerary.setItineraryItems(itineraryItemList);
