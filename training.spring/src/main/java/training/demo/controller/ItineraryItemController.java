@@ -38,7 +38,7 @@ public class ItineraryItemController {
     @RequestMapping(
             value = "/find/{id}",
             method = RequestMethod.PUT)
-    public ResponseEntity<List<ItineraryItem>> getAll(@PathVariable("id") int idItinerary){
+    public ResponseEntity<MyItemArray> getAll(@PathVariable("id") int idItinerary){
         Itinerary itinerary = itineraryService.findItineraryByItineraryId(idItinerary);
 
         List<ItineraryItem> itineraryItems = itineraryItemService.findItinerariesByItinerary(itinerary);
@@ -47,10 +47,11 @@ public class ItineraryItemController {
             item.setOrganiser(null);
         }
         if(itineraryItems.isEmpty()){
-            return new ResponseEntity<List<ItineraryItem>>(itineraryItems, HttpStatus.NOT_FOUND);
+            MyItemArray myItemArray = new MyItemArray(itineraryItems, false);
+            return new ResponseEntity<MyItemArray>(myItemArray, HttpStatus.NOT_FOUND);
         }
-        System.out.println(itineraryItems.toString());
-        return new ResponseEntity<List<ItineraryItem>>(itineraryItems, HttpStatus.OK);
+        MyItemArray myItemArray = new MyItemArray(itineraryItems, true);
+        return new ResponseEntity<MyItemArray>(myItemArray, HttpStatus.OK);
     }
 
 
@@ -108,5 +109,32 @@ public class ItineraryItemController {
     public ResponseEntity<Itinerary> deleteItineraryItem(@PathVariable("id") int idItinerary){
         itineraryService.deleteItineraryByItineraryId(idItinerary);
         return new ResponseEntity<Itinerary>(HttpStatus.OK);
+    }
+
+    // inner class
+    private class MyItemArray {
+        private List<ItineraryItem> events;
+        private boolean success;
+
+        public MyItemArray(List<ItineraryItem> events, boolean success) {
+            this.events = events;
+            this.success = success;
+        }
+
+        public List<ItineraryItem> getEvents() {
+            return events;
+        }
+
+        public void setEvents(List<ItineraryItem> events) {
+            this.events = events;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
     }
 }
