@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "users")
 public class User implements Serializable, UserDetails{
-	
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +35,11 @@ public class User implements Serializable, UserDetails{
 
 	@Column(name = "role")
 	private String role;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="itinerary_id")
+	private Itinerary itinerary;
+
 	@JsonIgnore
 	public int getUserId() {
 		return userId;
@@ -85,7 +84,15 @@ public class User implements Serializable, UserDetails{
 		this.role = role;
 	}
 
-	@Override
+    public Itinerary getItinerary() {
+        return itinerary;
+    }
+
+    public void setItinerary(Itinerary itinerary) {
+        this.itinerary = itinerary;
+    }
+
+    @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 			List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 			grantedAuthorities.add(new SimpleGrantedAuthority(getRole()));

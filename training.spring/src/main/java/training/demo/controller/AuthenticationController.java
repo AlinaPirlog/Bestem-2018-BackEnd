@@ -20,7 +20,7 @@ import training.demo.security.JwtTokenUtil;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthenticationController {
 
     private String tokenHeader;

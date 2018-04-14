@@ -24,7 +24,7 @@ import training.demo.security.JwtTokenUtil;
 import training.demo.service.UserJpaService;
  
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 	
 	private String tokenHeader = "Authorization";
