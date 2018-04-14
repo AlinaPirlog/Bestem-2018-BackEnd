@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,12 @@ public class User implements Serializable, UserDetails{
 
 	@Column(name = "role")
 	private String role;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "company_name")
+    private String companyName;
 
     @OneToMany(mappedBy = "user")
     private List<Itinerary> itineraries;
@@ -92,6 +99,22 @@ public class User implements Serializable, UserDetails{
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     public List<Itinerary> getItineraries() {
         return itineraries;

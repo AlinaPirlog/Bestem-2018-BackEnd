@@ -10,7 +10,7 @@ public class Itinerary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "itinerary_id")
-    private int itineraryID;
+    private int itineraryId;
 
     @Column(name = "itinerary_name")
     private String itineraryName;
@@ -18,7 +18,7 @@ public class Itinerary {
     private int rating;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_id")
     private User user;
 
     @OneToMany(mappedBy = "itinerary")
@@ -27,12 +27,12 @@ public class Itinerary {
     @OneToMany(mappedBy = "itinerary")
     private List<ItineraryItem> itineraryItems;
 
-    public int getItineraryID() {
-        return itineraryID;
+    public int getItineraryId() {
+        return itineraryId;
     }
 
-    public void setItineraryID(int itineraryID) {
-        this.itineraryID = itineraryID;
+    public void setItineraryId(int itineraryId) {
+        this.itineraryId = itineraryId;
     }
 
     public String getItineraryName() {
@@ -53,6 +53,22 @@ public class Itinerary {
 
     public User getUser() {
         return user;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<ItineraryItem> getItineraryItems() {
+        return itineraryItems;
+    }
+
+    public void setItineraryItems(List<ItineraryItem> itineraryItems) {
+        this.itineraryItems = itineraryItems;
     }
 
     public void setUser(User user) {

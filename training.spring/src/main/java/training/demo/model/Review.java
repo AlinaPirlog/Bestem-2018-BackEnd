@@ -2,7 +2,6 @@ package training.demo.model;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "review")
@@ -12,7 +11,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "review_id")
-    private int reviewID;
+    private int reviewId;
     @Column(name = "rating")
     private int rating;
     @Column(name = "description")
@@ -35,12 +34,12 @@ public class Review {
         this.users = users;
     }
 
-    public int getReviewID() {
-        return reviewID;
+    public int getReviewId() {
+        return reviewId;
     }
 
-    public void setReviewID(int reviewID) {
-        this.reviewID = reviewID;
+    public void setReviewId(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public int getRating() {
