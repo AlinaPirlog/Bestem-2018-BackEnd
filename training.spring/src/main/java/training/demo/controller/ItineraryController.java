@@ -48,7 +48,12 @@ public class ItineraryController {
         for (Itinerary itinerary:
              itineraries) {
             itinerary.setUser(null);
-            itinerary.setItineraryItems(null);
+            List<ItineraryItem> itinerarieItems = itinerary.getItineraryItems();
+            for (ItineraryItem item:
+                 itinerarieItems) {
+                item.setOrganiser(null);
+                item.setItinerary(null);
+            }
         }
         if(itineraries.isEmpty()){
             return new ResponseEntity<List<Itinerary>>(HttpStatus.NOT_FOUND);

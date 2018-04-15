@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import training.demo.model.Itinerary;
 import training.demo.model.ItineraryItem;
+import training.demo.model.Location;
 import training.demo.model.User;
 import training.demo.security.JwtTokenUtil;
 import training.demo.service.ItineraryItemJpaService;
@@ -45,6 +46,10 @@ public class ItineraryItemController {
         for (ItineraryItem item: itineraryItems) {
             item.setItinerary(null);
             item.setOrganiser(null);
+            Location location = item.getLocation();
+            if (location != null) {
+                location.setItineraryItems(null);
+            }
         }
         if(itineraryItems.isEmpty()){
             MyItemArray myItemArray = new MyItemArray(itineraryItems, false);

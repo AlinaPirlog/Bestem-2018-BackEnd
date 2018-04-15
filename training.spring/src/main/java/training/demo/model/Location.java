@@ -1,9 +1,14 @@
 package training.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "location")
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class, property="@location_id")
 public class Location {
     private static final long serialVersionUID = 1L;
 
@@ -24,18 +29,23 @@ public class Location {
     private String city;
     @Column(name = "country")
     private String country;
+    @OneToMany(mappedBy = "location")
+    private List<ItineraryItem> itineraryItems;
 
     public Location() {
         super();
     }
 
-    public Location(String locationName, String longitude, String latitude, String description, String city, String country) {
+    public Location(String locationName, String longitude,
+                    String latitude, String description,
+                    String city, String country, List<ItineraryItem> itineraryItems) {
         this.locationName = locationName;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
         this.city = city;
         this.country = country;
+        this.itineraryItems = itineraryItems;
     }
 
     public int getLocationId() {
@@ -94,5 +104,11 @@ public class Location {
         this.country = country;
     }
 
+    public List<ItineraryItem> getItineraryItems() {
+        return itineraryItems;
+    }
 
+    public void setItineraryItems(List<ItineraryItem> itineraryItems) {
+        this.itineraryItems = itineraryItems;
+    }
 }

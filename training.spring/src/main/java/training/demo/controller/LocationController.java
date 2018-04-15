@@ -27,6 +27,11 @@ public class LocationController {
             method = RequestMethod.GET)
     public ResponseEntity<List<Location>> getAll(){
         List<Location> locations = locationJpaService.findAllLocations();
+
+        for (Location loc : locations) {
+            loc.setItineraryItems(null);
+        }
+
         if(locations.isEmpty()){
             return new ResponseEntity<List<Location>>(HttpStatus.NOT_FOUND);
         }

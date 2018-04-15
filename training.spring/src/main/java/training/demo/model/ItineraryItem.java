@@ -1,11 +1,15 @@
 package training.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "itinerary_item")
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class, property="@itinerary_item_id")
 public class ItineraryItem {
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +29,9 @@ public class ItineraryItem {
     @JoinColumn(name = "itinerary_id", nullable = false)
     private Itinerary itinerary;
     @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User organiser;
 
@@ -42,12 +49,13 @@ public class ItineraryItem {
     public ItineraryItem(String itineraryItemName, Date startDate,
                          Date endDate, String description,
                          Itinerary itinerary, User organiser,
-                         List<User> participants) {
+                         List<User> participants, Location location) {
         this.itineraryItemName = itineraryItemName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
         this.itinerary = itinerary;
+        this.location = location;
         this.organiser = organiser;
         this.participants = participants;
     }
@@ -98,6 +106,14 @@ public class ItineraryItem {
 
     public void setItinerary(Itinerary itinerary) {
         this.itinerary = itinerary;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public User getOrganiser() {

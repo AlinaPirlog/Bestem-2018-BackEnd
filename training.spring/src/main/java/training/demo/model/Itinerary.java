@@ -21,7 +21,9 @@ public class Itinerary implements Serializable {
     @Column(name = "itinerary_name")
     private String itineraryName;
     @Column(name = "rating")
-    private int rating;
+    private Integer rating;
+    @Column(name = "color")
+    private String color;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
@@ -37,8 +39,12 @@ public class Itinerary implements Serializable {
         super();
     }
 
-    public Itinerary(String itineraryName, int rating, User user, List<Review> reviews, List<ItineraryItem> itineraryItems) {
+    public Itinerary(String itineraryName, Integer rating,
+                     User user, List<Review> reviews,
+                     List<ItineraryItem> itineraryItems,
+                     String color) {
         this.itineraryName = itineraryName;
+        this.rating = rating;
         this.rating = rating;
         this.user = user;
         this.reviews = reviews;
@@ -61,11 +67,11 @@ public class Itinerary implements Serializable {
         this.itineraryName = itineraryName;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
@@ -91,5 +97,13 @@ public class Itinerary implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
