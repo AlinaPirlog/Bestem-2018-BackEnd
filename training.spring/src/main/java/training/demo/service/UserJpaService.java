@@ -51,4 +51,15 @@ public class UserJpaService implements UserDetailsService{
         }
 	}
 
+	public User findByEmail(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
+
+		if (user == null) {
+			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
+		} else {
+			System.out.println("User from DB: " + user.getUserId() + "  " + user.getUsername());
+			return user;
+		}
+	}
+
 }

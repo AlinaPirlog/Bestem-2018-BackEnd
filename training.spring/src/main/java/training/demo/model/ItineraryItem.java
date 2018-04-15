@@ -26,7 +26,7 @@ public class ItineraryItem {
     @Column(name = "description")
     private String description;
     @ManyToOne
-    @JoinColumn(name = "itinerary_id", nullable = false)
+    @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
     @ManyToOne
     @JoinColumn(name = "location_id")
